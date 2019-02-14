@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src='/js/SFMediaStream.js'></script>
+    <script type="text/javascript" src="/js/compressor.js"></script>
+</head>
+<body>
+<video src="" id="video" style="width:700px; height: 350px;" autoplay="true"></video>
+
+<canvas style="display:none;" id="preview"></canvas>
+<button onclick="asPresenter()">Presenter</button>
+<input type="text" id="debug"><br>
+<div id="logger"></div>
+</body>
+<script type="text/javascript">
+    var canvas = document.getElementById("preview");
+    let contex = canvas.getContext('2d');
+    Compressor.setDefaults({quality:0.6});
+    canvas.width = 900;
+    canvas.height = 700;
+
+    contex.width = canvas.width;
+    contex.height = canvas.height;
+
+    var video = document.getElementById("video");
+
+    var socket = io("/", {transports:['websocket']});
+
+    function logger(msg){
+        $('#logger').text(msg);
+    }
+
+    function loadCamera(stream){
+        //video.src = window.URL.createObjectURL(stream);
+        video.srcObject = stream;
+        logger("Camera connected");
+    }
+
+    function loadFail(){
+        logger("Camera not connected");
+    }
+
+    function viewVideo(video,context){
+        context.drawImage(video,0,0,context.width,context.height);
+        // canvas.toBlob(function(blob){
+        //     new Compressor(blob,{success(result){
+        //             var newImage = new Image();
+        //             newImage.src = URL.createObjectURL(result);
+        //             socket.emit('stream',newImage.src);
+        //         }, error(err){
+        //             console.log(err.message);
+        //         }})
+        // })
+        socket.emit('stream',canvas.toDataURL('image/webp', 0.6));
+    }
+
+    $(function(){
+        navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia );
+
+        if(navigator.getUserMedia){
+            navigator.getUserMedia({video: true, audio: false},loadCamera,loadFail);
+        }
+
+        // setInterval(function(){
+        //     viewVideo(video,contex);
+        // },5);
+    });
+
+    var debug = document.querySelector('#debug');
+
+    // ===== Presenter =====
+    let presenterMedia = false;
+    function asPresenter(){
+        if(presenterMedia === false){
+            // Set latency to 100ms (Equal with streamer)
+            presenterMedia = new ScarletsMediaPresenter({
+                audio:{
+                    channelCount:1,
+                    echoCancellation: false
+                }
+            }, 100);
+
+            presenterMedia.onRecordingReady = function(packet){
+                console.log("Recording started!");
+                console.log("Header size: " + packet.data.size);
+
+                // Every new client streamer must receive this header buffer data
+                socket.emit('bufferHeader', packet);
+            }
+
+            presenterMedia.onBufferProcess = function(streamData){
+                debug.value = "Buffer sent: " + streamData[0].size + "bytes";
+                socket.emit('audioStream', streamData);
+                viewVideo(video,contex);
+            }
+        }
+
+        presenterMedia.startRecording();
+    }
+
+
+</script>
+</html>

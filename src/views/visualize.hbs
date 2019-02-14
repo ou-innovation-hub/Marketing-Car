@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src='/js/SFMediaStream.js'></script>
+</head>
+<body>
+<img id="play">
+<audio id="audio"></audio>
+<button onclick="asStreamer()">Streamer</button>
+<input type="text" id="debug"><br>
+</body>
+<script type="text/javascript">
+    document.onkeydown = checkKey;
+    var socket = io("/",{transports:['websocket']});
+    var debug = document.querySelector('#debug');
+    // ===== Streamer =====
+    var audioStreamer = false;
+    function asStreamer(){
+        if(audioStreamer === false){
+            // Set latency to 100ms (Equal with presenter)
+            audioStreamer = new ScarletsAudioStreamer(100);
+            audioStreamer.playStream();
+
+            // Buffer header must be received first
+            socket.on('bufferHeader', function(packet){
+                audioStreamer.setBufferHeader(packet);
+            });
+            socket.on('stream',function(image){
+                $('#play').attr('src',image);
+            });
+            // Receive buffer and play it
+            socket.on('audioStream', function(packet){
+                debug.value = "Buffer received: "+packet[0].byteLength+"bytes";
+                audioStreamer.receiveBuffer(packet);
+            });
+        }
+
+        // Request buffer header
+        socket.emit('requestBufferHeader', '');
+    }
+
+    function checkKey(e) {
+
+        e = e || window.event;
+
+        if (e.keyCode == '38') {
+            // up arrow
+            socket.emit('forward', "")
+        }
+        else if (e.keyCode == '40') {
+            // down arrow
+            socket.emit('reverse', "")
+        }
+        else if (e.keyCode == '37') {
+            // left arrow
+            socket.emit('left', "")
+        }
+        else if (e.keyCode == '39') {
+            // right arrow
+            socket.emit('right', "")
+        }
+        else if (e.keyCode == '32'){
+            socket.emit('stop', "")
+        }
+
+    }
+
+</script>
+</html>

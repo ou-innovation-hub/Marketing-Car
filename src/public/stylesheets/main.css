@@ -1,0 +1,193 @@
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.searchnav{
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    white-space: nowrap;
+}
+
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 24px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.searchnav a{
+    padding: 8px 8px 8px 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 24px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #ff6f00;
+}
+
+.searchnav a:hover{
+    color: #1e88e5;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.searchnav .closebtn{
+    position: absolute;
+    top: 0;
+    font-size: 36px;
+    margin-right: 0;
+    padding-left: 5px;
+}
+.sidenav hr{
+    width: 90%;
+}
+
+.link-icon{
+    display: inline-flex;
+    vertical-align: middle;
+    padding-bottom: 4px;
+}
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    /*transition: margin-left .5s;*/
+    transition: all .5s;
+    padding-top: 10px;
+    background: #1b1e21;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none !important;
+}
+.fixed-table-container {
+    border: 1px solid transparent;
+    border: none !important;
+}
+.bootstrap-table .table>tbody>tr>td {
+    border-right: 2px solid transparent;
+}
+.bootstrap-table .table>thead>tr>th {
+    border-right: 2px solid transparent;
+}
+
+.hidden{
+    display: none !important;
+}
+
+.imageBtn{
+    height: 40px;
+    width: 40px;
+}
+.openMenu{
+    padding-bottom: 10px;
+}
+
+.material-icons.md-32 { font-size: 32px; height: 32px; width: 32px;}
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+    .searchnav a {font-size:18px;}
+    .searchnav {padding-top: 15px;}
+}
+/*Disable text selection when it doesnt make sense*/
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 50; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+.overlay-content {
+    background: white;
+    position: relative;
+    top: 10%; /* 25% from the top */
+    width: 100%; /* 100% width */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px #E4E4E4;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+}
+
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: #666666;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+}
