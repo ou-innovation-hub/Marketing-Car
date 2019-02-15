@@ -26,8 +26,9 @@
 
     var video = document.getElementById("video");
 
-    var socket = io("/", {transports:['websocket']});
-
+    //var socket = io("/", {transports:['websocket']});
+    var socket = io();
+    socket.connect({reconnect:true});
     function logger(msg){
         $('#logger').text(msg);
     }
