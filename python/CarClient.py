@@ -5,9 +5,9 @@ import socketio
 import time
 import cv2
 import numpy as np
-import Adafruit_PCA9685
-pwm = Adafruit_PCA9685.PCA9685(0x40)
-pwm.set_pwm_freq(60)
+# import Adafruit_PCA9685
+# pwm = Adafruit_PCA9685.PCA9685(0x40)
+# pwm.set_pwm_freq(60)
 speedList = [372,374,376, 400, 430, 432, 434, 436]
 speedIndex = 3
 fwdmax = 550
@@ -21,7 +21,7 @@ inc = 1
 turn = servo_start
 
 sio = socketio.Client()
-sio.connect('http://localhost:8081')
+sio.connect('http://hubby.us-east-2.elasticbeanstalk.com/')
 
 def changeSpeed(up=False, down=False):
     global speedIndex
